@@ -20,7 +20,7 @@ function DrawerNavigator() {
   return (
     <Drawer.Navigator screenOptions={{ headerShown: false }}>
       <Drawer.Screen name="Home" component={HomeScreen} />
-      <Drawer.Screen name="Schedule" component={SchedulePage} />
+      <Drawer.Screen name="SchedulePage" component={SchedulePage} />
       <Drawer.Screen name="QRLogin" component={QRLogin} />
       <Drawer.Screen name="DT" component={DigitalTwin} />
       <Drawer.Screen name="History" component={History} />
@@ -35,6 +35,7 @@ export default function Index() {
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="Main" component={DrawerNavigator} />
       <Stack.Screen name="Appointment" component={Appointment} />
+      <Stack.Screen name="SchedulePage" component={SchedulePage} />
       <Stack.Screen name="QRLogin" component={QRLogin} />
       <Stack.Screen name="DT" component={DigitalTwin} />
       <Stack.Screen name="History" component={History} />

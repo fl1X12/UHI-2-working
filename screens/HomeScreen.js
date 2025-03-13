@@ -5,7 +5,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 
 const features = [
-  { id: "1", title: "Scheduling", image: require("../assets/images/calendar.png"), screenName: "Appointment" },
+  { id: "1", title: "Appointment", image: require("../assets/images/calendar.png"), screenName: "Appointment" },
   { id: "2", title: "Prescription", image: require("../assets/images/prescription.png"), screenName: "SchedulePage" },
   { id: "3", title: "QR Login", image: require("../assets/images/qr.png"), screenName: "QRLogin" },
   { id: "4", title: "Digital Twin", image: require("../assets/images/digitalTwin.png"), screenName: "DT" },
