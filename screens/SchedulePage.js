@@ -11,7 +11,7 @@ const SchedulePage = () => {
     <View style={styles.container}>
       {/* Custom Header */}
       <View style={styles.header}>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={()=>{navigation.openDrawer()}}>
           <Icon name="menu" size={28} color="black" style={{ marginLeft: 15 }} />
         </TouchableOpacity>
         <View style={styles.headerIcons}>
