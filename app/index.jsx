@@ -13,6 +13,9 @@ import DigitalTwin from "../screens/DigitalTwin";
 import History from "../screens/History";
 import PrescriptionList from "../screens/PrescriptionPage";
 import AddMedicinePage from "../screens/AddMedicine";
+import ViewAllScreen from "../screens/ViewAllScreen";
+import CallDoctorScreen from "../screens/CallDoctor";
+import BookNowScreen from "../screens/BookNowScreen";
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -44,6 +47,9 @@ export default function Index() {
       <Stack.Screen name="History" component={History} />
       <Stack.Screen name="PrescriptionList" component={PrescriptionList} />
       <Stack.Screen name="AddMedicine" component={AddMedicinePage} />
+      <Stack.Screen name="ViewAll" component={ViewAllScreen} />
+      <Stack.Screen name="CallDoctor" component={CallDoctorScreen} />
+      <Stack.Screen name="BookNow" component={BookNowScreen} />
     </Stack.Navigator>
   );
 }
