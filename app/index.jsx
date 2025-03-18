@@ -11,6 +11,8 @@ import Appointment from "../screens/Appointment";
 import QRLogin from "../screens/QRLogin";
 import DigitalTwin from "../screens/DigitalTwin";
 import History from "../screens/History";
+import PrescriptionList from "../screens/PrescriptionPage";
+import AddMedicinePage from "../screens/AddMedicine";
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -20,6 +22,7 @@ function DrawerNavigator() {
   return (
     <Drawer.Navigator screenOptions={{ headerShown: false }}>
       <Drawer.Screen name="Home" component={HomeScreen} />
+      <Drawer.Screen name="Appointment" component={Appointment} />
       <Drawer.Screen name="SchedulePage" component={SchedulePage} />
       <Drawer.Screen name="QRLogin" component={QRLogin} />
       <Drawer.Screen name="DT" component={DigitalTwin} />
@@ -39,6 +42,8 @@ export default function Index() {
       <Stack.Screen name="QRLogin" component={QRLogin} />
       <Stack.Screen name="DT" component={DigitalTwin} />
       <Stack.Screen name="History" component={History} />
+      <Stack.Screen name="PrescriptionList" component={PrescriptionList} />
+      <Stack.Screen name="AddMedicine" component={AddMedicinePage} />
     </Stack.Navigator>
   );
 }
