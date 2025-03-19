@@ -1,8 +1,8 @@
-import React from "react";
+import React,{useEffect} from "react";
 import { View, Text, Image, TouchableOpacity, StyleSheet, FlatList } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import { Ionicons } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
+import { DrawerActions, useNavigation } from "@react-navigation/native";
 
 const features = [
   { id: "1", title: "Appointment", image: require("../assets/images/calendar.png"), screenName: "Appointment" },
@@ -14,13 +14,20 @@ const features = [
 
 const HomeScreen = () => {
   const navigation = useNavigation();
-
+  const openDrawer = () => {
+    // Check if we're in the drawer navigator
+    try {
+      navigation.openDrawer();
+    } catch (error) {
+      navigation.navigate("MainDrawer");
+    }
+  };
   return (
     <View style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
         {/* Menu Button to Open Drawer */}
-        <TouchableOpacity onPress={() => navigation.openDrawer()}>
+        <TouchableOpacity onPress={ openDrawer/*() => navigation.dispatch(DrawerActions.openDrawer())*/}>
           <Ionicons name="menu" size={28} color="black" />
         </TouchableOpacity>
 

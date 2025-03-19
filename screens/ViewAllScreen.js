@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Image, ScrollView, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
 export default function ViewAllScreen() {
   const navigation = useNavigation();
@@ -18,7 +19,7 @@ export default function ViewAllScreen() {
       {/* Header Section */}
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Text style={styles.menuIcon}>←</Text>
+          <Icon name="arrow-left-thick" size={28} color="black" style={{ marginLeft: 15 }} />
         </TouchableOpacity>
         <Text style={styles.location}>📍 Benaguru </Text>
       </View>

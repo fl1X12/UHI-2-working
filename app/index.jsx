@@ -16,6 +16,9 @@ import AddMedicinePage from "../screens/AddMedicine";
 import ViewAllScreen from "../screens/ViewAllScreen";
 import CallDoctorScreen from "../screens/CallDoctor";
 import BookNowScreen from "../screens/BookNowScreen";
+import LoginScreen from "../screens/login";
+import OtpScreen from "../screens/Otp";
+import DoctorHome from "../screens/DoctorHome";
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -39,12 +42,10 @@ function DrawerNavigator() {
 export default function Index() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="Main" component={DrawerNavigator} />
-      <Stack.Screen name="Appointment" component={Appointment} />
-      <Stack.Screen name="SchedulePage" component={SchedulePage} />
-      <Stack.Screen name="QRLogin" component={QRLogin} />
-      <Stack.Screen name="DT" component={DigitalTwin} />
-      <Stack.Screen name="History" component={History} />
+      <Stack.Screen name="Login" component={LoginScreen} />
+      <Stack.Screen name="OtpScreen" component={OtpScreen} />
+      <Stack.Screen name="MainDrawer" component={DrawerNavigator} />
+      <Stack.Screen name="DocHome" component={DoctorHome} />
       <Stack.Screen name="PrescriptionList" component={PrescriptionList} />
       <Stack.Screen name="AddMedicine" component={AddMedicinePage} />
       <Stack.Screen name="ViewAll" component={ViewAllScreen} />

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import Constants from "expo-constants";
 import {
   View,
   Text,
@@ -10,17 +11,19 @@ import {
 import { Appbar } from "react-native-paper";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useNavigation } from "@react-navigation/native";
+import { navigateToDrawerScreen } from "../utils/navigation";
 
 const PrescriptionList = () => {
   const navigation = useNavigation();
   const [medicines, setMedicines] = useState([]);
   const [patientId, setPatientId] = useState("");
-
+  const IP_ADDRESS=Constants.expoConfig.extra.IP_ADDRESS;
+  
   // Fetch medicines from the backend
   const fetchMedicines = async () => {
     if (patientId.trim()) {
       try {
-        const response = await fetch(`http://192.168.250.159:5000/medicines/${patientId}`);
+        const response = await fetch(`http://${IP_ADDRESS}:5000/medicines/${patientId}`);
         const data = await response.json();
         setMedicines(data);
       } catch (error) {
@@ -35,9 +38,11 @@ const PrescriptionList = () => {
     <View style={styles.container}>
       {/* App Bar */}
       <Appbar.Header style={styles.header}>
-        <Icon name="menu" size={28} color="white" style={{ marginLeft: 15 }} />
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Icon name="arrow-left-thick" size={28} color="white" style={{ marginLeft: 15 }} />
+        </TouchableOpacity>
         <Text style={styles.headerText}>Prescription List</Text>
-        <TouchableOpacity onPress={() => navigation.navigate("SchedulePage", { patientId })}>
+        <TouchableOpacity onPress={() => navigateToDrawerScreen(navigation,"SchedulePage",{patientId})/*navigation.navigate("SchedulePage", { patientId })*/}>
           <Icon name="calendar" size={26} color="white" style={{ marginRight: 20 }} />
         </TouchableOpacity>
       </Appbar.Header>

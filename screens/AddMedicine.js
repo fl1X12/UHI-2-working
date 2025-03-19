@@ -1,8 +1,10 @@
 import React, { useState } from "react";
+import Constants from "expo-constants";
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 import { Picker } from "@react-native-picker/picker";
+
 
 const AddMedicinePage = ({ route }) => {
   const navigation = useNavigation();
@@ -12,12 +14,13 @@ const AddMedicinePage = ({ route }) => {
   const [timeSlot, setTimeSlot] = useState("Morning");
   const [mealPreference, setMealPreference] = useState("Before");
   const [patientId, setPatientId] = useState("");
+  const IP_ADDRESS=Constants.expoConfig.extra.IP_ADDRESS;
 
   const handleAddMedicine = async () => {
     if (name.trim() && dosage.trim() && patientId.trim()) {
       try {
         const schedule = [{ day, time: timeSlot, beforeMeal: mealPreference === "Before" }];
-        const response = await axios.post("http://192.168.250.159:5000/medicines", {
+        const response = await axios.post(`http://${IP_ADDRESS}:5000/medicines`, {
           name,
           dosage,
           schedule,

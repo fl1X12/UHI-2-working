@@ -44,7 +44,8 @@
       },
       "eas": {
         "projectId": "fb11e23d-f880-4394-b44e-ec055a01c2dc"
-      }
+      },
+      "IP_ADDRESS":"192.168.250.1"
     }
   }
 }

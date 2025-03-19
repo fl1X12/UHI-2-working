@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Constants from "expo-constants";
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator, TextInput } from "react-native";
 import { Appbar } from "react-native-paper";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
@@ -13,6 +14,7 @@ const SchedulePage = () => {
   const [fetched, setFetched] = useState(false);
   const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
   const timeSlots = ["Morning", "Afternoon", "Evening", "Night"];
+  const IP_ADDRESS=Constants.expoConfig.extra.IP_ADDRESS;
 
   useEffect(() => {
     if (patientId.trim() && !fetched) {
@@ -22,7 +24,7 @@ const SchedulePage = () => {
 
   const fetchMedicines = async () => {
     try {
-      const response = await axios.get(`http://192.168.250.1:5000/medicines/${patientId}`);
+      const response = await axios.get(`http://${IP_ADDRESS}:5000/medicines/${patientId}`);
       setMedicines(response.data);
       setFetched(true);
     } catch (error) {
