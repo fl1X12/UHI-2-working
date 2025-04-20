@@ -1,4 +1,5 @@
-import React,{useEffect} from "react";
+import Constants from "expo-constants";
+import React,{useEffect, useState} from "react";
 import { View, Text, Image, TouchableOpacity, StyleSheet, FlatList } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import { Ionicons } from "@expo/vector-icons";
@@ -12,8 +13,34 @@ const features = [
   { id: "5", title: "History", image: require("../assets/images/history.png"), screenName: "History" },
 ];
 
-const HomeScreen = () => {
+const HomeScreen = ({route}) => {
+  const [name, setName] = useState();
+  const [age,setAge] = useState();
+  const [ph, setPh] = useState();
+  const [bg, setBg] = useState();
+
+  const IP_ADDRESS=Constants.expoConfig.extra.IP_ADDRESS;
   const navigation = useNavigation();
+  const id=route.params?.Userid;
+  console.log("User ID from route params:", id);
+  const fetchUser= async()=>{
+    try{
+      const response=await fetch(`http://${IP_ADDRESS}:5501/user/getById`,{
+        method:'POST',
+        headers:{'content-type':'application/json'},
+        body:JSON.stringify({id})
+      })
+      const result=await response.json();
+      setName(result.name);
+      setAge(result.age);
+      setPh(result.phone);
+      setBg(result.bg);
+      console.log("User data fetched successfully:", result);
+    }
+    catch(error){
+      console.error("Error fetching user data:", error);
+    }
+  }
   const openDrawer = () => {
     // Check if we're in the drawer navigator
     try {
@@ -22,6 +49,13 @@ const HomeScreen = () => {
       navigation.navigate("MainDrawer");
     }
   };
+
+  useEffect(() => {
+    if (id) {
+      fetchUser();
+    }
+  }, []);
+  
   return (
     <View style={styles.container}>
       {/* Header */}
@@ -35,9 +69,10 @@ const HomeScreen = () => {
         <View style={styles.profileContainer}>
           <View style={styles.profilePic}></View>
           <View>
-            <Text style={styles.userInfo}>Name -</Text>
-            <Text style={styles.userInfo}>Phone number -</Text>
-            <Text style={styles.userInfo}>Blood Group -</Text>
+            <Text style={styles.userInfo}>Name - {name}</Text>
+            <Text style={styles.userInfo}>Blood Group {bg}</Text>
+            <Text style={styles.userInfo}>Age - {age}</Text>
+            <Text style={styles.userInfo}>Phone number - {ph} </Text>
           </View>
         </View>
 

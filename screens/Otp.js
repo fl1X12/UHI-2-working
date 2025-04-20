@@ -5,6 +5,7 @@ import { useNavigation } from "@react-navigation/native";
 
 const OtpScreen = ({ route }) => {
   const { phoneNumber, isDoctorLogin } = route.params || {};
+  
   const [otp, setOtp] = useState("");
   const [otpError, setOtpError] = useState(false);
   const navigation = useNavigation();
@@ -24,18 +25,49 @@ const OtpScreen = ({ route }) => {
         body: JSON.stringify({ phoneNumber, otp }),
       });
       const result = await response.json();
+      
+      const userFind= await fetch(`http://${IP_ADDRESS}:5501/user/find`,{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({'ph':phoneNumber.slice(3)})
+      });
+
+      const userFlag=await userFind.json();
+      
       if (response.ok) {
-        console.log("OTP verified successfully:", result);
+        console.log("OTP verified successfully:");
         if (isDoctorLogin) {
           navigation.navigate("DocHome");
         } else {
-          navigation.navigate("MainDrawer");
+          if(userFlag.exists==true){
+            navigation.reset({
+              index: 0,
+              routes: [
+                {
+                  name: 'MainDrawer',
+                  state: {
+                    routes: [
+                      {
+                        name: 'Home',
+                        params: { Userid: userFlag.id },
+                      },
+                    ],
+                  },
+                },
+              ],
+            });
+            
+          }
+          else{
+            console.log(typeof(phoneNumber))
+            navigation.navigate("RegForm",userFlag.id);
+          }
         }
       } else {
-        console.error("OTP verification failed:", result.error);
+        console.error("OTP verification failed:");
       }
     } catch (error) {
-      console.error("Network error verifying OTP:", error);
+      console.error(error);
     }
   };
 

@@ -34,19 +34,21 @@ const LoginScreen = () => {
     // Construct full phone number (e.g., with +91 country code)
     const fullPhoneNumber = '+91' + cleanedPhone;
     try {
+      //navigation.navigate("MainDrawer");
       console.log("Sending OTP to:", fullPhoneNumber);
       const response = await fetch(`http://${IP_ADDRESS}:5500/sendOTP`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ phoneNumber: fullPhoneNumber }),
       });
-      const result = await response.json();
+
+      const result = await response.json();*/
       if (response.ok) {
-        console.log("OTP sent successfully:", result);
+        console.log("OTP sent successfully:");
         // Navigate to OtpScreen and pass the phone number and login type.
         navigation.navigate("OtpScreen", { phoneNumber: fullPhoneNumber, isDoctorLogin });
       } else {
-        console.error("Error sending OTP:", result.error);
+        console.error("Error sending OTP:" ,result.error);
       }
     } catch (error) {
       console.error("Network error sending OTP:", error);

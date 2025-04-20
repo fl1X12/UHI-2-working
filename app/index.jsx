@@ -19,6 +19,7 @@ import BookNowScreen from "../screens/BookNowScreen";
 import LoginScreen from "../screens/login";
 import OtpScreen from "../screens/Otp";
 import DoctorHome from "../screens/DoctorHome";
+import RegForm from "../screens/RegForm";
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -44,6 +45,7 @@ export default function Index() {
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="Login" component={LoginScreen} />
       <Stack.Screen name="OtpScreen" component={OtpScreen} />
+      <Stack.Screen name="RegForm" component={RegForm} />
       <Stack.Screen name="MainDrawer" component={DrawerNavigator} />
       <Stack.Screen name="DocHome" component={DoctorHome} />
       <Stack.Screen name="PrescriptionList" component={PrescriptionList} />
