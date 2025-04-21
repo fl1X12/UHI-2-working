@@ -15,11 +15,11 @@ import PrescriptionList from "../screens/PrescriptionPage";
 import AddMedicinePage from "../screens/AddMedicine";
 import ViewAllScreen from "../screens/ViewAllScreen";
 import CallDoctorScreen from "../screens/CallDoctor";
-import BookNowScreen from "../screens/BookNowScreen";
 import LoginScreen from "../screens/login";
 import OtpScreen from "../screens/Otp";
 import DoctorHome from "../screens/DoctorHome";
 import RegForm from "../screens/RegForm";
+import BookAppointment from "../screens/BookAppointment";
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -52,7 +52,7 @@ export default function Index() {
       <Stack.Screen name="AddMedicine" component={AddMedicinePage} />
       <Stack.Screen name="ViewAll" component={ViewAllScreen} />
       <Stack.Screen name="CallDoctor" component={CallDoctorScreen} />
-      <Stack.Screen name="BookNow" component={BookNowScreen} />
+      <Stack.Screen name="BookAppointment" component={BookAppointment} />
     </Stack.Navigator>
   );
 }

@@ -1,19 +1,48 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { useNavigation } from '@react-navigation/native';
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import Constants from 'expo-constants';
+import { ScrollView } from 'react-native';
+
 
 export default function CallDoctorScreen() {
   const navigation = useNavigation();
-  const [selectedDoctor, setSelectedDoctor] = useState('Personal Doctor number');
+  const IP_ADDRESS = Constants.expoConfig.extra.IP_ADDRESS;
+  const [specialization,setSpecialization]=useState("General Medicine");
+  const [doctors,setDoctors]=useState([
+    {id:1, name: 'Dr. John Doe', description: 'Cardiologist' },
+    {id:2, name: 'Dr. Jane Smith', description: 'Pediatrician' },
+    {id:3, name: 'Dr. Mike Johnson', description: 'Dermatologist' }
+  ]); 
 
-  // Create sample doctors array - replace with real data
-  const doctors = [
-    { name: 'Dr. John Doe', description: 'Cardiologist' },
-    { name: 'Dr. Jane Smith', description: 'Pediatrician' },
-    { name: 'Dr. Mike Johnson', description: 'Dermatologist' }
-  ];
+  const doctors_specialization = async () => {
+    try {
+      const response = await fetch(`http://${IP_ADDRESS}:5501/doctor/specialization`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ specialization })
+      });
+  
+      if (response.ok) { // if status 200
+        const result = await response.json();
+        setDoctors(result.doctor_list || []);
+      } else {
+        const errorResult = await response.json();
+        console.log('No doctors found:', errorResult.message);
+        setDoctors([]); // Set empty list if 404
+      }
+    } catch (error) {
+      console.error("Error fetching doctor list:", error);
+      setDoctors([]); // Optional: Empty list on network error
+    }
+  };
+  useEffect(()=>{
+    doctors_specialization();
+  },[specialization]);  
 
   return (
     <View style={styles.container}>
@@ -23,7 +52,7 @@ export default function CallDoctorScreen() {
           style={styles.backButton}
           onPress={() => navigation.goBack()}
         >
-          <Icon name="arrow-left-thick" size={28} color="black" style={{ marginLeft: 15 }} />
+          <Icon name="arrow-left-thick" size={28} color="black" style={{ marginLeft: -10 }} />
         </TouchableOpacity>
       </View>
 
@@ -36,16 +65,21 @@ export default function CallDoctorScreen() {
       {/* Dropdown & Input */}
       <View style={styles.dropdownContainer}>
         <Picker
-          selectedValue={selectedDoctor}
+          selectedValue={specialization}
           style={styles.picker}
-          onValueChange={(itemValue) => setSelectedDoctor(itemValue)}
+          onValueChange={(itemValue) => setSpecialization(itemValue)}
+          dropdownIconRippleColor={"#8881f7"}
         >
-          <Picker.Item label="Personal Doctor number" value="Personal Doctor number" />
-          <Picker.Item label="Emergency Doctor" value="Emergency Doctor" />
+          <Picker.Item label="General Medicine" value="General Medicine" />
+          <Picker.Item label="Cardiology" value="Cardiology" />
+          <Picker.Item label="ENT" value="ENT"/>
+          <Picker.Item label="Orthopedist" value="Orthopedist" />
+          <Picker.Item label="Dermatologist" value="Dermatologist" />
+          <Picker.Item label="Pediatrician" value="Pediatrician" />
         </Picker>
       </View>
 
-      <View style={styles.inputContainer}>
+      {/*<View style={styles.inputContainer}>
         <Text style={styles.countryCode}>+91</Text>
         <TextInput 
           style={styles.input} 
@@ -57,31 +91,45 @@ export default function CallDoctorScreen() {
       <View style={styles.orContainer}>
         <Text style={styles.orText}>OR</Text>
       </View>
+      */}
 
       {/* Doctor List */}
-      <View style={styles.doctorList}>
+      <View style={styles.doctorList}>{doctors.length === 0 ? (
+      <Text style={styles.noDoctorsText}>No doctors available for this specialization.</Text>
+      ) : (
+        <ScrollView contentContainerStyle={styles.scrollContainer}>
         {doctors.map((doctor, index) => (
-          <View key={`doctor-${index}`} style={styles.doctorCard}>
-            {/* Use Image component with defaultSource as fallback */}
-            <Image 
-              source={require('../assets/images/displaypic.png')} 
-              style={styles.avatar}
-              defaultSource={require('../assets/images/displaypic.png')}
-            />
-            <View style={styles.doctorInfo}>
-              <Text style={styles.doctorName}>{doctor.name}</Text>
-              <Text style={styles.description}>{doctor.description}</Text>
-            </View>
-            <TouchableOpacity style={styles.callButton}>
-              <Image 
-                source={require('../assets/images/phone.png')} 
-                style={styles.callIcon}
-                defaultSource={require('../assets/images/phone.png')}
-              />
-            </TouchableOpacity>
-          </View>
-        ))}
+        <View key={`doctor-${index}`} style={styles.doctorCard}>
+        {/* Doctor Image */}
+        <Image
+          source={require('../assets/images/displaypic.png')}
+          style={styles.avatar}
+          defaultSource={require('../assets/images/displaypic.png')}
+        />
+
+          {/* Doctor Information */}
+        <View style={styles.doctorInfo}>
+          <Text style={styles.doctorName}>{doctor.name}</Text>
+          <Text style={styles.description}>{doctor.specialization}</Text>
+          <Text style={styles.description}>{doctor.hospital}</Text>
+          <Text style={styles.description}>{doctor.experience} years of experience</Text>
+        </View>
+
+          {/* Call Button */}
+        <TouchableOpacity
+          style={styles.callButton}
+          onPress={() => {
+            console.log('moving to book appointment')
+            navigation.navigate('BookAppointment', {doctorId:doctor.id});
+          }}>
+            <Text style={styles.bookNowText}>Book Now</Text>
+        </TouchableOpacity>
       </View>
+      ))}
+    </ScrollView>
+    )}
+    </View>
+
     </View>
   );
 }
@@ -123,7 +171,7 @@ const styles = StyleSheet.create({
     marginVertical: 10
   },
   picker: { 
-    height: 50, 
+    height: 55, 
     width: '100%' 
   },
   inputContainer: { 
@@ -184,5 +232,15 @@ const styles = StyleSheet.create({
   callIcon: { 
     width: 30, 
     height: 30
+  },
+  bookNowText: {
+    fontWeight: 'bold', 
+    fontSize: 16, 
+    color: '#000000' 
+  },
+  callButton:{
+    backgroundColor:'#8881f7',
+    borderRadius:10,
+    padding:10
   },
 });
