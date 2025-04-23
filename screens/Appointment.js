@@ -4,12 +4,12 @@ import { Picker } from '@react-native-picker/picker';
 import { useNavigation } from '@react-navigation/native';
 import Constants from 'expo-constants';
 
-export default function Appointment() {
+export default function Appointment({route}) {
   const navigation = useNavigation();
   const IP_ADDRESS = Constants.expoConfig.extra.IP_ADDRESS;
   const [specialization, setSpecialization] = useState("General Medicine");
   const [doctors, setDoctors] = useState([]);
-
+  const patient_id=route.params?.userId;
   const [activeButton, setActiveButton] = useState(null);
   const [hoverButton, setHoverButton] = useState(null);
 
@@ -139,7 +139,7 @@ export default function Appointment() {
 
               <TouchableOpacity style={styles.callButton} onPress={() => {
                 console.log('moving to book appointment')
-                navigation.navigate('BookAppointment', {doctorId:doctor.id,name:doctor.name,specialization:doctor.specialization});}}>
+                navigation.navigate('BookAppointment', {doctorId:doctor.id,name:doctor.name,specialization:doctor.specialization,patient_id:patient_id});}}>
                 <Text style={styles.bookNowText}>Book Now</Text>
               </TouchableOpacity>
             </View>

@@ -120,7 +120,7 @@ export default function CallDoctorScreen() {
           style={styles.callButton}
           onPress={() => {
             console.log('moving to book appointment')
-            navigation.navigate('BookAppointment', {doctorId:doctor.id});
+            navigation.navigate('BookAppointment', {doctorId:doctor.id,patient_id:routeToScreen.params?.patient_id, name:doctor.name, specialization:doctor.specialization});
           }}>
             <Text style={styles.bookNowText}>Book Now</Text>
         </TouchableOpacity>

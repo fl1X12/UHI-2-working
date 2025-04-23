@@ -10,11 +10,12 @@ export default function BookAppointment({ route }) {
   const doctorId = route.params?.doctorId;
   const name = route.params?.name;
   const specialization = route.params?.specialization;
+  const patient_id=route.params?.patient_id;
   const IP_ADDRESS = Constants.expoConfig.extra.IP_ADDRESS;
 
   const [dates, setDates] = useState([]);
   const [selectedDate, setSelectedDate] = useState(null);
-  
+  console.log("Patient ID in BookAppointment:", patient_id);
   const [bookedTimeSlots, setBookedTimeSlots] = useState([]);
   const [availableTimeSlots, setAvailableTimeSlots] = useState([]);
   const [selectedTimeSlot, setSelectedTimeSlot] = useState(null);
@@ -80,6 +81,30 @@ export default function BookAppointment({ route }) {
     }
   };
 
+  const bookSlot = async (date, docId, slot, patient_id) => {
+    try {
+      const response = await fetch(`http://${IP_ADDRESS}:5501/consultation/book_slot`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ date,doctor_id:docId,slot,patient_id}),
+      });
+      console.log(patient_id);
+      if (!response.ok) {
+        console.error('Failed to book appointment');
+        return false;
+      }
+  
+      const data = await response.json();
+      console.log('Booking Response:', data);
+      return true;
+    } catch (error) {
+      console.error('Error booking appointment:', error);
+      return false;
+    }
+  };
+
   // Calculate available time slots by filtering out booked ones
   const calculateAvailableSlots = (bookedSlots) => {
     return allTimeSlots.filter(slot => !bookedSlots.includes(slot));
@@ -106,12 +131,12 @@ export default function BookAppointment({ route }) {
     // You could also add additional logic here like opening a confirmation modal
   };
 
-  const handleBookAppointment = () => {
+  const handleBookAppointment = async () => {
     if (!selectedTimeSlot) {
       Alert.alert('Please select a time slot');
       return;
     }
-    
+  
     Alert.alert(
       'Confirm Appointment',
       `Book appointment with Dr. ${name} on ${selectedDate.toLocaleDateString()} at ${selectedTimeSlot}?`,
@@ -122,10 +147,20 @@ export default function BookAppointment({ route }) {
         },
         {
           text: 'Confirm',
-          onPress: () => {
-            // Here you would make an API call to book the appointment
-            Alert.alert('Success', 'Your appointment has been booked!');
-            navigation.goBack();
+          onPress: async () => {
+            const success = await bookSlot(
+              formatDateForMySQL(selectedDate),
+              doctorId,
+              selectedTimeSlot,
+              patient_id
+            );
+  
+            if (success) {
+              Alert.alert('Success', 'Your appointment has been booked!');
+              navigation.goBack();
+            } else {
+              Alert.alert('Error', 'Failed to book the appointment. Please try again.');
+            }
           },
         },
       ]

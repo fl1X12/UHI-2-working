@@ -84,7 +84,7 @@ const HomeScreen = ({route}) => {
       <View style={styles.fullRow}>
         <TouchableOpacity
           style={styles.featureCard}
-          onPress={() => navigation.navigate(features[0].screenName)}
+          onPress={() => navigation.navigate(features[0].screenName,{userId:id})}
         >
           <Image source={features[0].image} style={styles.featureImage} />
           <Text style={styles.featureTitle}>{features[0].title}</Text>
@@ -92,20 +92,24 @@ const HomeScreen = ({route}) => {
       </View>
 
       {/* Remaining Features in a 2-column Grid */}
-      <FlatList
-        data={features.slice(1)}
-        keyExtractor={(item) => item.id}
-        numColumns={2}
+      <FlatList 
+        data={features.slice(1)} 
+        keyExtractor={(item) => item.id} 
+        numColumns={2} 
         renderItem={({ item }) => (
-          <TouchableOpacity
-            style={styles.featureCard}
-            onPress={() => item.screenName && navigation.navigate(item.screenName)} // Safely navigate if screen exists
-          >
-            <Image source={item.image} style={styles.featureImage} />
-            <Text style={styles.featureTitle}>{item.title}</Text>
-          </TouchableOpacity>
-        )}
-      />
+        <TouchableOpacity 
+          style={styles.featureCard} 
+          onPress={() => {
+            if (item.screenName) {
+                navigation.navigate(item.screenName, { userId: id });
+          }
+        }}
+        >
+          <Image source={item.image} style={styles.featureImage} />
+          <Text style={styles.featureTitle}>{item.title}</Text>
+        </TouchableOpacity>
+  )} 
+/>
 
       {/* Language Selector */}
       <View style={styles.languageSelector}>
